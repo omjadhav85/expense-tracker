@@ -1,6 +1,8 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
+import { Navbar } from './components/Navbar';
+import { Dashboard } from './pages/Dashboard';
 
 const router = createBrowserRouter([
   {
@@ -15,10 +17,26 @@ const router = createBrowserRouter([
     path: '/signup',
     element: <SignupPage />,
   },
+  {
+    path: '/dashboard',
+    element: <Dashboard />,
+  },
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <div className='flex flex-col h-screen overflow-hidden'>
+      <Navbar />
+      <div
+        className='flex flex-col overflow-auto'
+        style={{
+          height: 'calc(100vh - 3.5rem)',
+        }}
+      >
+        <RouterProvider router={router} />
+      </div>
+    </div>
+  );
 }
 
 export default App;
