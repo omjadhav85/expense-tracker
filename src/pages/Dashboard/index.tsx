@@ -1,8 +1,27 @@
 import { Expense } from '@/components/Expense';
 import { Button } from '@/components/ui/button';
-import { expenses } from '@/data';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { IExpense } from './types';
 
 export const Dashboard = () => {
+  const [expenses, setExpenses] = useState<IExpense[]>([]);
+
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/expenses');
+        console.log('res: ', res);
+
+        setExpenses(res.data);
+      } catch (err) {
+        console.error('error: ', err);
+      }
+    };
+
+    fetchExpenses();
+  }, []);
+
   return (
     <div className='h-full flex flex-col items-center gap-4 p-4'>
       <Button>Add new expense</Button>
