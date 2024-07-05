@@ -4,7 +4,7 @@ import axiosClient from '@/configs/axiosConfig';
 import { USER_DATA } from '@/lib/constants';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const SignupPage = () => {
   const [userData, setUserData] = useState({
@@ -17,6 +17,8 @@ export const SignupPage = () => {
   const { name, email, password, confirmPassword } = userData;
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const updateField = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -42,6 +44,7 @@ export const SignupPage = () => {
       localStorage.setItem(USER_DATA, JSON.stringify(res.data));
 
       toast.success('Sign up successful!');
+      navigate('/dashboard');
     } catch (err: any) {
       console.error('Err: ', err);
       toast.error(err.response.data.message || 'Something went wrong!');

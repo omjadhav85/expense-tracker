@@ -2,15 +2,16 @@ import { Input } from '@/components/Input';
 import { Button } from '@/components/ui/button';
 import axiosClient from '@/configs/axiosConfig';
 import { USER_DATA } from '@/lib/constants';
-import { AxiosError } from 'axios';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,6 +26,7 @@ export const LoginPage = () => {
 
       localStorage.setItem(USER_DATA, JSON.stringify(res.data));
       toast.success('Logged in successfully!');
+      navigate('/dashboard');
     } catch (err: any) {
       console.error('Err: ', err);
       toast.error(err.response.data.message || 'Something went wrong!');

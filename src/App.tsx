@@ -1,28 +1,7 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { LoginPage } from './pages/LoginPage';
-import { SignupPage } from './pages/SignupPage';
+import { RouterProvider } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
-import { Dashboard } from './pages/Dashboard';
 import { Toaster } from 'react-hot-toast';
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <LoginPage />,
-  },
-  {
-    path: '/login',
-    element: <LoginPage />,
-  },
-  {
-    path: '/signup',
-    element: <SignupPage />,
-  },
-  {
-    path: '/dashboard',
-    element: <Dashboard />,
-  },
-]);
+import { router } from './router';
 
 function App() {
   return (
