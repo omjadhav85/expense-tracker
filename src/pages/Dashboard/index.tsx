@@ -1,8 +1,8 @@
 import { Expense } from '@/components/Expense';
 import { Button } from '@/components/ui/button';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { IExpense } from './types';
+import axiosClient from '@/configs/axiosConfig';
 
 export const Dashboard = () => {
   const [expenses, setExpenses] = useState<IExpense[]>([]);
@@ -10,8 +10,7 @@ export const Dashboard = () => {
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/expenses');
-        console.log('res: ', res);
+        const res = await axiosClient.get('/api/expenses');
 
         setExpenses(res.data);
       } catch (err) {

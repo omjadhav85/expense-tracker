@@ -3,6 +3,7 @@ import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 import { Navbar } from './components/Navbar';
 import { Dashboard } from './pages/Dashboard';
+import { Toaster } from 'react-hot-toast';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,7 @@ function App() {
       >
         <RouterProvider router={router} />
       </div>
+      <Toaster />
     </div>
   );
 }
