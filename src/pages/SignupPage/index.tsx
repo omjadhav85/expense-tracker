@@ -2,11 +2,15 @@ import { Input } from '@/components/Input';
 import { Button } from '@/components/ui/button';
 import axiosClient from '@/configs/axiosConfig';
 import { USER_DATA } from '@/lib/constants';
+import { useAuthStore } from '@/store/authStore';
+import { IUserData } from '@/store/types';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 
 export const SignupPage = () => {
+  const setUserDataStore = useAuthStore((state) => state.actions.setUserData);
+
   const [userData, setUserData] = useState({
     name: '',
     email: '',
@@ -35,13 +39,15 @@ export const SignupPage = () => {
     setIsLoading(true);
 
     try {
-      const res = await axiosClient.post('/api/users/signup', {
+      const res = await axiosClient.post<IUserData>('/api/users/signup', {
         name,
         email,
         password,
       });
 
       localStorage.setItem(USER_DATA, JSON.stringify(res.data));
+
+      setUserDataStore(res.data);
 
       toast.success('Sign up successful!');
       navigate('/dashboard');

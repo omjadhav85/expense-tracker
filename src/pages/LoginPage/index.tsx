@@ -2,11 +2,15 @@ import { Input } from '@/components/Input';
 import { Button } from '@/components/ui/button';
 import axiosClient from '@/configs/axiosConfig';
 import { USER_DATA } from '@/lib/constants';
+import { useAuthStore } from '@/store/authStore';
+import { IUserData } from '@/store/types';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 
 export const LoginPage = () => {
+  const setUserData = useAuthStore((state) => state.actions.setUserData);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -19,12 +23,15 @@ export const LoginPage = () => {
     setIsLoading(true);
 
     try {
-      const res = await axiosClient.post('/api/users/login', {
+      const res = await axiosClient.post<IUserData>('/api/users/login', {
         email,
         password,
       });
 
       localStorage.setItem(USER_DATA, JSON.stringify(res.data));
+
+      setUserData(res.data);
+
       toast.success('Logged in successfully!');
       navigate('/dashboard');
     } catch (err: any) {
