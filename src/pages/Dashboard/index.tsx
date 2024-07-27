@@ -1,11 +1,11 @@
-import { Expense } from '@/components/Expense';
-import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
-import { IExpense } from './types';
-import axiosClient from '@/configs/axiosConfig';
-import { AddExpenseModal } from '@/components/AddExpenseModal';
-import { showError } from '@/lib/utils';
-import { getMonth, getYear } from 'date-fns';
+import { Expense } from "@/components/Expense";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { IExpense } from "./types";
+import axiosClient from "@/configs/axiosConfig";
+import { AddExpenseModal } from "@/components/AddExpenseModal";
+import { showError } from "@/lib/utils";
+import { getMonth, getYear } from "date-fns";
 
 const monthMapping: Record<string, number> = {
   January: 1,
@@ -38,7 +38,7 @@ export const Dashboard = () => {
   const fetchExpenses = async () => {
     setIsFetching(true);
     try {
-      const res = await axiosClient.get<IExpense[]>('/api/expenses', {
+      const res = await axiosClient.get<IExpense[]>("/api/expenses", {
         params: {
           month: month,
           year: year,
@@ -47,7 +47,7 @@ export const Dashboard = () => {
 
       setExpenses(res.data);
     } catch (err) {
-      console.error('error: ', err);
+      console.error("error: ", err);
       showError(err);
     } finally {
       setIsFetching(false);
@@ -83,21 +83,19 @@ export const Dashboard = () => {
   }, [month, year]);
 
   return (
-    <div className='h-full flex flex-col items-center gap-4 p-4 overflow-auto'>
+    <div className="h-full flex flex-col items-center gap-4 p-4 overflow-auto">
       <Button onClick={() => setIsAddExpenseModalOpen(true)}>
         Add new expense
       </Button>
 
-      <h1 className='text-3xl font-bold'>All expenses</h1>
+      <h1 className="text-3xl font-bold">All expenses</h1>
 
-      {isFetching && <div>Fetching expenses...</div>}
-
-      <div className='flex gap-4'>
+      <div className="flex gap-4">
         <select
-          id='month'
+          id="month"
           value={month}
           onChange={(e) => setMonth(Number(e.target.value))}
-          className='p-2 outline-none cursor-pointer rounded-md  bg-transparent border border-blue-300'
+          className="p-2 outline-none cursor-pointer rounded-md  bg-transparent border border-blue-300"
         >
           {Object.keys(monthMapping).map((m) => (
             <option key={m} value={monthMapping[m]}>
@@ -107,10 +105,10 @@ export const Dashboard = () => {
         </select>
 
         <select
-          id='year'
+          id="year"
           value={year}
           onChange={(e) => setYear(Number(e.target.value))}
-          className='p-2 outline-none cursor-pointer rounded-md  bg-transparent border border-blue-300'
+          className="p-2 outline-none cursor-pointer rounded-md  bg-transparent border border-blue-300"
         >
           {[2023, 2024, 2025].map((y) => (
             <option key={y} value={y}>
@@ -120,8 +118,10 @@ export const Dashboard = () => {
         </select>
       </div>
 
+      {isFetching && <div>Fetching expenses...</div>}
+
       {!isFetching && (
-        <div className='w-[600px] flex flex-col gap-2'>
+        <div className="w-[600px] flex flex-col gap-2">
           {expenses.map((expense) => (
             <Expense
               key={expense._id}
