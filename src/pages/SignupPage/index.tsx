@@ -1,21 +1,21 @@
-import { Input } from '@/components/Input';
-import { Button } from '@/components/ui/button';
-import axiosClient from '@/configs/axiosConfig';
-import { USER_DATA } from '@/lib/constants';
-import { useAuthStore } from '@/store/authStore';
-import { IUserData } from '@/store/types';
-import { useState } from 'react';
-import toast from 'react-hot-toast';
-import { Link, useNavigate } from 'react-router-dom';
+import { Input } from "@/components/Input";
+import { Button } from "@/components/ui/button";
+import axiosClient from "@/configs/axiosConfig";
+import { USER_DATA } from "@/lib/constants";
+import { useAuthStore } from "@/store/authStore";
+import { IUserData } from "@/store/types";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
 
 export const SignupPage = () => {
   const setUserDataStore = useAuthStore((state) => state.actions.setUserData);
 
   const [userData, setUserData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const { name, email, password, confirmPassword } = userData;
@@ -32,14 +32,14 @@ export const SignupPage = () => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      toast.error('Passwords does not match!');
+      toast.error("Passwords does not match!");
       return;
     }
 
     setIsLoading(true);
 
     try {
-      const res = await axiosClient.post<IUserData>('/api/users/signup', {
+      const res = await axiosClient.post<IUserData>("/api/users/signup", {
         name,
         email,
         password,
@@ -49,49 +49,49 @@ export const SignupPage = () => {
 
       setUserDataStore(res.data);
 
-      toast.success('Sign up successful!');
-      navigate('/dashboard');
+      toast.success("Sign up successful!");
+      navigate("/dashboard");
     } catch (err: any) {
-      console.error('Err: ', err);
-      toast.error(err.response.data.message || 'Something went wrong!');
+      console.error("Err: ", err);
+      toast.error(err.response.data.message || "Something went wrong!");
     } finally {
       setIsLoading(false);
     }
   };
   return (
-    <div className='flex flex-col items-center justify-center h-screen'>
-      <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
-        <Input label='Name' value={name} name='name' onChange={updateField} />
+    <div className="flex flex-col items-center justify-center h-screen">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <Input label="Name" value={name} name="name" onChange={updateField} />
 
         <Input
-          label='Email'
-          type='email'
+          label="Email"
+          type="email"
           value={email}
-          name='email'
+          name="email"
           onChange={updateField}
         />
 
         <Input
-          label='Password'
-          type='password'
+          label="Password"
+          type="password"
           value={password}
-          name='password'
+          name="password"
           onChange={updateField}
         />
 
         <Input
-          label='Re-enter password'
-          type='password'
+          label="Re-enter password"
+          type="password"
           value={confirmPassword}
-          name='confirmPassword'
+          name="confirmPassword"
           onChange={updateField}
         />
 
-        <Button type='submit'>Sign Up</Button>
+        <Button type="submit">{isLoading ? "Signing up..." : "Sign Up"}</Button>
 
-        <p className='text-sm'>
-          Already have an account?{' '}
-          <Link to='/login' className='text-blue-500'>
+        <p className="text-sm">
+          Already have an account?{" "}
+          <Link to="/login" className="text-blue-500">
             Login!
           </Link>
         </p>
