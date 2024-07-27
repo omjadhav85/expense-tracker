@@ -6,10 +6,11 @@ interface Props {
   expense: IExpense;
   onEdit: (selectedExpense: IExpense) => void;
   onDelete: (selectedExpense: IExpense) => void;
+  isDeleting: boolean;
 }
 
 export const Expense = (props: Props) => {
-  const { expense, onEdit, onDelete } = props;
+  const { expense, onEdit, onDelete, isDeleting } = props;
   const { amount, title, description } = expense;
 
   const [isOpen, setIsOpen] = useState(false);
@@ -40,7 +41,9 @@ export const Expense = (props: Props) => {
 
           <div className="flex gap-4 items-center">
             <Button onClick={handleEdit}>Edit</Button>
-            <Button onClick={handleDelete}>Delete</Button>
+            <Button onClick={handleDelete}>
+              {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
           </div>
         </div>
       )}
