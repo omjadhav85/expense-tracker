@@ -33,7 +33,6 @@ export const Dashboard = () => {
   const [year, setYear] = useState(getYear(new Date()));
   const [isFetching, setIsFetching] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
 
   const fetchExpenses = async () => {
     setIsFetching(true);
