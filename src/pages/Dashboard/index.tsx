@@ -31,8 +31,12 @@ export const Dashboard = () => {
 
   const [month, setMonth] = useState(getMonth(new Date()) + 1);
   const [year, setYear] = useState(getYear(new Date()));
+  const [isFetching, setIsFetching] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const fetchExpenses = async () => {
+    setIsFetching(true);
     try {
       const res = await axiosClient.get<IExpense[]>('/api/expenses', {
         params: {
@@ -45,6 +49,8 @@ export const Dashboard = () => {
     } catch (err) {
       console.error('error: ', err);
       showError(err);
+    } finally {
+      setIsFetching(false);
     }
   };
 
@@ -54,12 +60,15 @@ export const Dashboard = () => {
   };
 
   const handleDelete = async (expObj: IExpense) => {
+    setIsDeleting(true);
     try {
       await axiosClient.delete(`/api/expenses/${expObj._id}`);
 
       await fetchExpenses();
     } catch (err) {
       showError(err);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -80,6 +89,8 @@ export const Dashboard = () => {
       </Button>
 
       <h1 className='text-3xl font-bold'>All expenses</h1>
+
+      {isFetching && <div>Fetching expenses...</div>}
 
       <div className='flex gap-4'>
         <select
@@ -109,16 +120,19 @@ export const Dashboard = () => {
         </select>
       </div>
 
-      <div className='w-[600px] flex flex-col gap-2'>
-        {expenses.map((expense) => (
-          <Expense
-            expense={expense}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            key={expense._id}
-          />
-        ))}
-      </div>
+      {!isFetching && (
+        <div className='w-[600px] flex flex-col gap-2'>
+          {expenses.map((expense) => (
+            <Expense
+              key={expense._id}
+              expense={expense}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              isDeleting={isDeleting}
+            />
+          ))}
+        </div>
+      )}
       {isAddExpenseModalOpen && (
         <AddExpenseModal
           isOpen={isAddExpenseModalOpen}
