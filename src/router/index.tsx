@@ -1,42 +1,50 @@
-import { createBrowserRouter } from 'react-router-dom';
-import { LoginPage } from '../pages/LoginPage';
-import { SignupPage } from '../pages/SignupPage';
-import { Dashboard } from '../pages/Dashboard';
-import { AuthRedirect } from './AuthRedirect';
-import { ProtectedRoutes } from './ProtectedRoutes';
-import { MainLayout } from '@/layouts/MainLayout';
+import { createBrowserRouter } from "react-router-dom";
+import { LoginPage } from "../pages/LoginPage";
+import { SignupPage } from "../pages/SignupPage";
+import { AuthRedirect } from "./AuthRedirect";
+import { ProtectedRoutes } from "./ProtectedRoutes";
+import { MainLayout } from "@/layouts/MainLayout";
+import { lazy, Suspense } from "react";
+
+const Dashboard = lazy(() =>
+  import("../pages/Dashboard").then((module) => ({ default: module.Dashboard }))
+);
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <MainLayout />,
     children: [
       {
-        path: '/',
+        path: "/",
         element: <AuthRedirect />,
         children: [
           {
-            path: '/',
+            path: "/",
             element: <LoginPage />,
           },
           {
-            path: '/login',
+            path: "/login",
             element: <LoginPage />,
           },
           {
-            path: '/signup',
+            path: "/signup",
             element: <SignupPage />,
           },
         ],
       },
 
       {
-        path: '/',
+        path: "/",
         element: <ProtectedRoutes />,
         children: [
           {
-            path: '/dashboard',
-            element: <Dashboard />,
+            path: "/dashboard",
+            element: (
+              <Suspense fallback={<div>Loading...</div>}>
+                <Dashboard />
+              </Suspense>
+            ),
           },
         ],
       },
