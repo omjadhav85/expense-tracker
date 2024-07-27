@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from '../ui/button';
 import { IExpense } from '@/pages/Dashboard/types';
+import { MdArrowForwardIos } from 'react-icons/md';
 
 interface Props {
   expense: IExpense;
@@ -28,11 +29,15 @@ export const Expense = (props: Props) => {
         className='flex items-center gap-4 rounded-md border p-4 cursor-pointer'
         onClick={() => setIsOpen(!isOpen)}
       >
+        <div>
+          <MdArrowForwardIos
+            className={`transition-all ${isOpen ? 'rotate-90 ' : ''}`}
+          />
+        </div>
         <div className='flex-1 flex items-center justify-between'>
           <p>{title}</p>
           <p>&#8377; {amount}</p>
         </div>
-        <div>v</div>
       </div>
       {isOpen && (
         <div className='bg-slate-200 flex flex-col gap-4 p-4 rounded-md '>

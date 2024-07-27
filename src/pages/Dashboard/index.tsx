@@ -5,6 +5,22 @@ import { IExpense } from './types';
 import axiosClient from '@/configs/axiosConfig';
 import { AddExpenseModal } from '@/components/AddExpenseModal';
 import { showError } from '@/lib/utils';
+import { getMonth, getYear } from 'date-fns';
+
+const monthMapping: Record<string, number> = {
+  January: 1,
+  February: 2,
+  March: 3,
+  April: 4,
+  May: 5,
+  June: 6,
+  July: 7,
+  August: 8,
+  September: 9,
+  October: 10,
+  November: 11,
+  December: 12,
+};
 
 export const Dashboard = () => {
   const [expenses, setExpenses] = useState<IExpense[]>([]);
@@ -13,13 +29,22 @@ export const Dashboard = () => {
 
   const [selectedExpense, setSelectedExpense] = useState<IExpense | null>(null);
 
+  const [month, setMonth] = useState(getMonth(new Date()) + 1);
+  const [year, setYear] = useState(getYear(new Date()));
+
   const fetchExpenses = async () => {
     try {
-      const res = await axiosClient.get<IExpense[]>('/api/expenses');
+      const res = await axiosClient.get<IExpense[]>('/api/expenses', {
+        params: {
+          month: month,
+          year: year,
+        },
+      });
 
       setExpenses(res.data);
     } catch (err) {
       console.error('error: ', err);
+      showError(err);
     }
   };
 
@@ -46,7 +71,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     fetchExpenses();
-  }, []);
+  }, [month, year]);
 
   return (
     <div className='h-full flex flex-col items-center gap-4 p-4 overflow-auto'>
@@ -55,6 +80,34 @@ export const Dashboard = () => {
       </Button>
 
       <h1 className='text-3xl font-bold'>All expenses</h1>
+
+      <div className='flex gap-4'>
+        <select
+          id='month'
+          value={month}
+          onChange={(e) => setMonth(Number(e.target.value))}
+          className='p-2 outline-none cursor-pointer rounded-md  bg-transparent border border-blue-300'
+        >
+          {Object.keys(monthMapping).map((m) => (
+            <option key={m} value={monthMapping[m]}>
+              {m}
+            </option>
+          ))}
+        </select>
+
+        <select
+          id='year'
+          value={year}
+          onChange={(e) => setYear(Number(e.target.value))}
+          className='p-2 outline-none cursor-pointer rounded-md  bg-transparent border border-blue-300'
+        >
+          {[2023, 2024, 2025].map((y) => (
+            <option key={y} value={y}>
+              {y}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div className='w-[600px] flex flex-col gap-2'>
         {expenses.map((expense) => (
