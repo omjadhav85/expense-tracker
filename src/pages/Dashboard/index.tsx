@@ -120,7 +120,7 @@ export const Dashboard = () => {
       {isFetching && <div>Fetching expenses...</div>}
 
       {!isFetching && (
-        <div className="w-[600px] flex flex-col gap-2">
+        <div className="w-[400px] md:w-[600px] flex flex-col gap-2">
           {expenses.map((expense) => (
             <Expense
               key={expense._id}
